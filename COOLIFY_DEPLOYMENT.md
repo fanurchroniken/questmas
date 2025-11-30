@@ -118,6 +118,8 @@ Coolify should automatically detect your `Dockerfile`. Verify these settings:
 
 ### 2.3 Set Environment Variables
 
+⚠️ **CRITICAL**: These environment variables contain **SECRETS** and must **NEVER** be committed to git!
+
 In Coolify, go to your application's **Environment Variables** section and add:
 
 ```env
@@ -130,7 +132,9 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 - They will be embedded in the built JavaScript bundle during the Docker build
 - The Dockerfile is configured to accept these as build arguments
 - Make sure these are the **production** Supabase credentials
-- Never commit these values to your repository
+- **NEVER commit these values to your repository** - They must only be set in Coolify
+- Verify `.env` files are in `.gitignore` (they should be)
+- Use actual values from your Supabase dashboard, not the placeholders above
 
 **Coolify Configuration**:
 - Coolify should automatically pass environment variables to the Docker build
@@ -320,11 +324,24 @@ For multiple environments (staging, production):
 
 ## Security Best Practices
 
-1. **Never commit secrets**: Keep `.env` files in `.gitignore`
+1. **Never commit secrets**: 
+   - Keep `.env` files in `.gitignore` ✅ (verified)
+   - Only `.env.example` should be in git (with placeholder values)
+   - All actual secrets must be set in Coolify, not in git
+   - Verify no secrets in git history: `git log --all --source -- "*env*" "*secret*"`
+
 2. **Use production Supabase keys**: Don't use development keys in production
+
 3. **Enable RLS**: Ensure Row Level Security is enabled on all Supabase tables
+
 4. **Regular updates**: Keep dependencies updated for security patches
+
 5. **Monitor logs**: Regularly check Coolify and Supabase logs for issues
+
+6. **Verify secrets are not exposed**:
+   - Check that environment variables are only set in Coolify dashboard
+   - Never hardcode secrets in source code
+   - Review built JavaScript bundle to ensure no secrets are visible (they will be embedded, but should only be the anon key which is safe for client-side)
 
 ## Monitoring & Maintenance
 
