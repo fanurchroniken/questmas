@@ -112,8 +112,45 @@ export function PhotoUpload({
       // Wait for video element to be ready
       setTimeout(() => {
         if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play().catch((playErr) => {
+          const video = videoRef.current;
+          video.srcObject = stream;
+          
+          // Add event listeners for video ready state
+          const handleLoadedMetadata = () => {
+            if (video.videoWidth > 0 && video.videoHeight > 0) {
+              setVideoReady(true);
+              console.log('Video ready:', video.videoWidth, video.videoHeight);
+            }
+          };
+
+          const handlePlaying = () => {
+            if (video.videoWidth > 0 && video.videoHeight > 0) {
+              setVideoReady(true);
+              console.log('Video playing:', video.videoWidth, video.videoHeight);
+            }
+          };
+
+          const handleCanPlay = () => {
+            if (video.videoWidth > 0 && video.videoHeight > 0) {
+              setVideoReady(true);
+              console.log('Video can play:', video.videoWidth, video.videoHeight);
+            }
+          };
+
+          // Add multiple event listeners to catch when video is ready
+          video.addEventListener('loadedmetadata', handleLoadedMetadata);
+          video.addEventListener('playing', handlePlaying);
+          video.addEventListener('canplay', handleCanPlay);
+          
+          video.play().then(() => {
+            // Check if video is ready after play
+            setTimeout(() => {
+              if (video.videoWidth > 0 && video.videoHeight > 0) {
+                setVideoReady(true);
+                console.log('Video ready after play:', video.videoWidth, video.videoHeight);
+              }
+            }, 200);
+          }).catch((playErr) => {
             console.error('Error playing video:', playErr);
             setError('Could not start camera preview. Please try again.');
             setShowCamera(false);
@@ -122,6 +159,10 @@ export function PhotoUpload({
               streamRef.current.getTracks().forEach((track) => track.stop());
               streamRef.current = null;
             }
+            // Remove event listeners
+            video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+            video.removeEventListener('playing', handlePlaying);
+            video.removeEventListener('canplay', handleCanPlay);
           });
         }
       }, 100);
@@ -1022,17 +1063,25 @@ Who's joining me? 👇
     }, 100);
   };
 
-  // Handle video element when camera is shown
+  // Handle video element when camera is shown - backup check
   useEffect(() => {
-    if (showCamera && videoRef.current && streamRef.current) {
+    if (showCamera && videoRef.current && streamRef.current && !videoReady) {
       const video = videoRef.current;
-      video.srcObject = streamRef.current;
       
-      const handleLoadedMetadata = () => {
-        // Video metadata is loaded, check if dimensions are valid
+      // Check periodically if video is ready
+      const checkVideoReady = () => {
         if (video.videoWidth > 0 && video.videoHeight > 0) {
           setVideoReady(true);
+          console.log('Video ready detected:', video.videoWidth, video.videoHeight);
         }
+      };
+
+      const handleLoadedMetadata = () => {
+        checkVideoReady();
+      };
+
+      const handlePlaying = () => {
+        checkVideoReady();
       };
 
       const handleError = (err: Event) => {
@@ -1042,20 +1091,22 @@ Who's joining me? 👇
       };
 
       video.addEventListener('loadedmetadata', handleLoadedMetadata);
+      video.addEventListener('playing', handlePlaying);
       video.addEventListener('error', handleError);
       
-      video.play().catch((err) => {
-        console.error('Error playing video:', err);
-        setError('Could not start camera preview. Please try again.');
-        setVideoReady(false);
-      });
+      // Periodic check as fallback
+      const interval = setInterval(() => {
+        checkVideoReady();
+      }, 500);
 
       return () => {
         video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        video.removeEventListener('playing', handlePlaying);
         video.removeEventListener('error', handleError);
+        clearInterval(interval);
       };
     }
-  }, [showCamera]);
+  }, [showCamera, videoReady]);
 
   // Cleanup camera stream on unmount
   useEffect(() => {
@@ -1262,11 +1313,12 @@ Who's joining me? 👇
             <button
               type="button"
               onClick={capturePhoto}
-              className="btn-cta flex-1 w-full sm:w-auto flex items-center justify-center gap-2"
-              disabled={!streamRef.current || !videoReady}
+              className="btn-cta flex-1 w-full sm:w-auto flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!streamRef.current || (videoRef.current && videoRef.current.videoWidth === 0)}
+              title={!streamRef.current ? 'Camera not ready' : (videoRef.current && videoRef.current.videoWidth === 0) ? 'Waiting for camera...' : 'Capture photo'}
             >
               <Camera className="w-5 h-5" />
-              {t('capturePhoto')}
+              {!streamRef.current || (videoRef.current && videoRef.current.videoWidth === 0) ? t('waiting') || 'Waiting...' : t('capturePhoto')}
             </button>
           </div>
         </div>
