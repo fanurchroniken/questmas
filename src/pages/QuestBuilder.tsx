@@ -27,6 +27,7 @@ import { PersonalizedShareModal } from '@/components/sharing/PersonalizedShareMo
 import { format } from 'date-fns';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
+import { TestModeToggle } from '@/components/TestModeToggle';
 
 export default function QuestBuilder() {
   const { id } = useParams<{ id: string }>();
@@ -647,6 +648,7 @@ export default function QuestBuilder() {
           isChristmasCalendar={quest.quest_type === 'christmas_calendar'}
         />
       )}
+      <TestModeToggle />
     </div>
   );
 }

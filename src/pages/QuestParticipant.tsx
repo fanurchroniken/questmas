@@ -14,7 +14,6 @@ import {
 } from '@/lib/services/participationService';
 import { CalendarView } from '@/components/quest/CalendarView';
 import { TaskDisplay } from '@/components/quest/TaskDisplay';
-import { TestModeToggle } from '@/components/TestModeToggle';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { format, isAfter, isBefore, parseISO, startOfDay } from 'date-fns';
 import { ArrowLeft, Trophy, CheckCircle } from 'lucide-react';
@@ -456,7 +455,6 @@ export default function QuestParticipant() {
           </div>
         )}
       </main>
-      <TestModeToggle />
     </div>
   );
 }
