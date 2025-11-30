@@ -1,12 +1,32 @@
 import { Link } from 'react-router-dom';
-import { Gift, Calendar, Share2, BarChart3, Sparkles, Star, CheckCircle, ArrowRight, Users, Zap, Globe, Heart, TrendingUp, Smartphone, Camera, MapPin, Quote, Lock, Unlock, Puzzle, Map, Lightbulb } from 'lucide-react';
+import { Gift, Calendar, Share2, BarChart3, Sparkles, Star, CheckCircle, ArrowRight, Users, Zap, Globe, Heart, TrendingUp, Smartphone, Camera, MapPin, Quote, Lock, Unlock, Puzzle, Map, Lightbulb, Menu, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect, useRef } from 'react';
 
 export default function Home() {
   const { user } = useAuth();
   const { t } = useTranslation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    if (mobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
 
   // Sample riddles for preview
   const sampleRiddles = [
@@ -70,7 +90,7 @@ export default function Home() {
       </div>
 
       {/* Navigation */}
-      <nav className="bg-cream/95 backdrop-blur-md shadow-lg border-b border-luxury-gold/20 sticky top-0 z-[90]">
+      <nav className="bg-cream/95 backdrop-blur-md shadow-lg border-b border-luxury-gold/20 sticky top-0 z-[90]" ref={menuRef}>
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
           <div className="flex justify-between h-14 sm:h-16 items-center">
             <Link to="/" className="flex items-center gap-1 sm:gap-2 hover:opacity-80 transition-opacity">
@@ -82,29 +102,88 @@ export default function Home() {
                 Questmas
               </span>
             </Link>
-            <div className="flex items-center gap-2 sm:gap-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-2 lg:gap-4">
               <LanguageSwitcher />
               {user ? (
                 <>
-                  <Link to="/dashboard" className="btn-secondary text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-2">
+                  <Link to="/dashboard" className="btn-secondary text-sm lg:text-base px-4 lg:px-6 py-1.5 lg:py-2">
                     {t('createCalendars') || 'Create Calendars'}
                   </Link>
-                  <Link to="/access" className="btn-primary shadow-glow-gold text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-2">
+                  <Link to="/access" className="btn-primary shadow-glow-gold text-sm lg:text-base px-4 lg:px-6 py-1.5 lg:py-2">
                     {t('accessCalendar') || 'Access a Calendar'}
                   </Link>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="btn-secondary text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-2">
+                  <Link to="/login" className="bg-deep-teal text-white px-4 lg:px-6 py-1.5 lg:py-2 rounded-lg font-medium hover:bg-forest-dark transition-colors text-sm lg:text-base">
                     {t('login')}
                   </Link>
-                  <Link to="/signup" className="btn-primary shadow-glow-gold text-xs sm:text-base px-3 sm:px-6 py-1.5 sm:py-2">
+                  <Link to="/signup" className="btn-primary shadow-glow-gold text-sm lg:text-base px-4 lg:px-6 py-1.5 lg:py-2">
                     {t('signup')}
                   </Link>
                 </>
               )}
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 text-forest-dark hover:bg-cream-dark rounded-lg transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-luxury-gold/20 py-4 space-y-3">
+              <div className="px-2">
+                <LanguageSwitcher />
+              </div>
+              {user ? (
+                <>
+                  <Link 
+                    to="/dashboard" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block btn-secondary text-base px-4 py-2 text-center"
+                  >
+                    {t('createCalendars') || 'Create Calendars'}
+                  </Link>
+                  <Link 
+                    to="/access" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block btn-primary shadow-glow-gold text-base px-4 py-2 text-center"
+                  >
+                    {t('accessCalendar') || 'Access a Calendar'}
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link 
+                    to="/login" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block bg-deep-teal text-white px-4 py-2 rounded-lg font-medium hover:bg-forest-dark transition-colors text-base text-center"
+                  >
+                    {t('login')}
+                  </Link>
+                  <Link 
+                    to="/signup" 
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block btn-primary shadow-glow-gold text-base px-4 py-2 text-center"
+                  >
+                    {t('signup')}
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </nav>
 
