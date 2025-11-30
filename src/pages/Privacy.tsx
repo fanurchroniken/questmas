@@ -83,7 +83,7 @@ export default function Privacy() {
             <section className="mb-8">
               <h2 className="text-2xl font-heading font-bold text-forest-dark mb-4">2. Hosting</h2>
               <p className="mb-4">
-                Diese Website wird bei einem externen Dienstleister gehostet (Hoster). Die personenbezogenen Daten, die auf dieser Website 
+                Diese Website wird bei einem externen Dienstleister gehostet (Conatbase & Supabase). Die personenbezogenen Daten, die auf dieser Website 
                 erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, 
                 Meta- und Kommunikationsdaten, Vertragsdaten, Kontaktdaten, Namen, Websitezugriffe und sonstige Daten, die über eine 
                 Website generiert werden, handeln.
@@ -122,12 +122,11 @@ export default function Privacy() {
               </p>
               <p className="mb-4">
                 Questmas<br />
-                [Ihre Adresse]<br />
-                [Ihre PLZ und Ort]
+                Flinger Str. 7<br />
+                40213 Düsseldorf
               </p>
               <p className="mb-4">
-                Telefon: [Ihre Telefonnummer]<br />
-                E-Mail: [Ihre E-Mail-Adresse]
+                E-Mail: kontakt@fanurchroniken.de
               </p>
               <p className="mb-4">
                 Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke 

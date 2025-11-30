@@ -29,26 +29,25 @@ export default function Imprint() {
               <h2 className="text-2xl font-heading font-bold text-forest-dark mb-4">Angaben gemäß § 5 TMG</h2>
               <p className="mb-4">
                 Questmas<br />
-                [Ihr Name oder Firmenname]<br />
-                [Ihre Straße und Hausnummer]<br />
-                [Ihre PLZ und Ort]
+                [Jannis Illgner]<br />
+                [Flinger Str. 7]<br />
+                [40213 Düsseldorf]
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-heading font-bold text-forest-dark mb-4">Kontakt</h2>
               <p className="mb-4">
-                Telefon: [Ihre Telefonnummer]<br />
-                E-Mail: [Ihre E-Mail-Adresse]
+                E-Mail: kontakt@fanurchroniken.de
               </p>
             </section>
 
             <section className="mb-8">
               <h2 className="text-2xl font-heading font-bold text-forest-dark mb-4">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
               <p className="mb-4">
-                [Ihr Name oder Firmenname]<br />
-                [Ihre Straße und Hausnummer]<br />
-                [Ihre PLZ und Ort]
+              [Jannis Illgner]<br />
+                [Flinger Str. 7]<br />
+                [40213 Düsseldorf]
               </p>
             </section>
 

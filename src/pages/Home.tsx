@@ -636,31 +636,12 @@ export default function Home() {
         {/* Footer */}
         <footer className="bg-forest-dark border-t border-luxury-gold/20 py-8 sm:py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Gift className="w-6 h-6 text-luxury-gold" />
                   <span className="text-xl font-heading font-bold text-cream">Questmas</span>
                 </div>
-                <p className="text-cream/70 text-sm font-body">
-                  {t('createMagicalCalendars') || 'Create magical Christmas adventures'}
-                </p>
-              </div>
-              <div>
-                <h4 className="text-cream font-heading font-semibold mb-4">Product</h4>
-                <ul className="space-y-2 text-sm text-cream/70 font-body">
-                  <li><Link to="/" className="hover:text-luxury-gold transition-colors">Features</Link></li>
-                  <li><Link to="/" className="hover:text-luxury-gold transition-colors">Pricing</Link></li>
-                  <li><Link to="/" className="hover:text-luxury-gold transition-colors">Examples</Link></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-cream font-heading font-semibold mb-4">Company</h4>
-                <ul className="space-y-2 text-sm text-cream/70 font-body">
-                  <li><Link to="/" className="hover:text-luxury-gold transition-colors">About</Link></li>
-                  <li><Link to="/" className="hover:text-luxury-gold transition-colors">Blog</Link></li>
-                  <li><Link to="/" className="hover:text-luxury-gold transition-colors">Contact</Link></li>
-                </ul>
               </div>
               <div>
                 <h4 className="text-cream font-heading font-semibold mb-4">Legal</h4>
@@ -671,7 +652,7 @@ export default function Home() {
               </div>
             </div>
             <div className="border-t border-luxury-gold/20 pt-8 text-center text-sm text-cream/70 font-body">
-              <p>© 2024 Questmas. {t('allRightsReserved') || 'All rights reserved.'}</p>
+              <p>© 2025 Questmas. {t('allRightsReserved') || 'All rights reserved.'}</p>
             </div>
           </div>
         </footer>
