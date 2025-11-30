@@ -142,10 +142,10 @@ export default function Dashboard() {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Link
                       to={`/quests/${quest.id}/edit`}
-                      className="btn-secondary flex-1 flex items-center justify-center gap-2 text-sm"
+                      className="btn-secondary flex-1 flex items-center justify-center gap-2 text-sm w-full sm:w-auto"
                     >
                       <Edit className="w-4 h-4 flex-shrink-0" />
                       <span className="truncate">{t('edit')}</span>
@@ -154,18 +154,18 @@ export default function Dashboard() {
                       <Link
                         to={`/q/${quest.share_code}`}
                         target="_blank"
-                        className="btn-primary flex-1 flex items-center justify-center gap-2 text-sm"
+                        className="btn-primary flex-1 flex items-center justify-center gap-2 text-sm w-full sm:w-auto"
                       >
                         <Eye className="w-4 h-4 flex-shrink-0" />
                         <span className="truncate">{t('view')}</span>
                       </Link>
                     )}
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     {quest.status === 'published' && quest.share_code && (
                       <Link
                         to={`/quests/${quest.id}/analytics`}
-                        className="btn-secondary flex-1 flex items-center justify-center gap-2 text-sm"
+                        className="btn-secondary flex-1 flex items-center justify-center gap-2 text-sm w-full sm:w-auto"
                       >
                         <BarChart3 className="w-4 h-4" />
                         <span>{t('analytics') || 'Analytics'}</span>
@@ -174,7 +174,7 @@ export default function Dashboard() {
                     <button
                       onClick={() => handleDelete(quest)}
                       disabled={deletingQuestId === quest.id}
-                      className={`btn-secondary flex items-center justify-center gap-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 disabled:opacity-50 ${quest.status === 'published' && quest.share_code ? 'flex-1' : 'w-full'}`}
+                      className={`btn-secondary flex items-center justify-center gap-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 disabled:opacity-50 w-full sm:w-auto ${quest.status === 'published' && quest.share_code ? 'flex-1' : ''}`}
                       title={t('delete')}
                     >
                       <Trash2 className="w-4 h-4" />

@@ -57,7 +57,7 @@ export function PhotoUpload({
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  const handleCameraCapture = () => {
+  const handleCameraCapture = async () => {
     // Check if we're on HTTPS (required for camera access on mobile)
     const isSecure = window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     
@@ -73,57 +73,79 @@ export function PhotoUpload({
 
     setShowCamera(true);
     setError(null);
+    setVideoReady(false);
     
-    // Request camera with more flexible constraints for better mobile compatibility
-    navigator.mediaDevices
-      .getUserMedia({ 
-        video: { 
-          facingMode: 'user', // Use front camera on mobile
-          // More flexible constraints for better compatibility
+    try {
+      // Request camera with more flexible constraints for better compatibility
+      // Try with front camera first (user), fallback to any available camera
+      const constraints: MediaStreamConstraints = {
+        video: {
+          facingMode: 'user', // Prefer front camera on mobile
           width: { ideal: 1280, max: 1920 },
           height: { ideal: 720, max: 1080 }
-        } 
-      })
-      .then((stream) => {
-        streamRef.current = stream;
-        setVideoReady(false);
-        // Use a small delay to ensure video element is ready
-        setTimeout(() => {
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-            videoRef.current.play().catch((playErr) => {
-              console.error('Error playing video:', playErr);
-              setError('Could not start camera preview. Please try again.');
-              setShowCamera(false);
-              setVideoReady(false);
-              if (streamRef.current) {
-                streamRef.current.getTracks().forEach((track) => track.stop());
-                streamRef.current = null;
-              }
-            });
-          }
-        }, 100);
-      })
-      .catch((err) => {
-        console.error('Error accessing camera:', err);
-        setShowCamera(false);
-        
-        // Provide more specific error messages
-        let errorMessage = 'Could not access camera. ';
-        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-          errorMessage += 'Please allow camera access in your browser settings and try again.';
-        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-          errorMessage += 'No camera found on this device.';
-        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
-          errorMessage += 'Camera is being used by another application.';
-        } else if (err.name === 'OverconstrainedError' || err.name === 'ConstraintNotSatisfiedError') {
-          errorMessage += 'Camera does not support the requested settings.';
-        } else {
-          errorMessage += 'Please use file upload instead.';
         }
-        
-        setError(errorMessage);
-      });
+      };
+
+      let stream: MediaStream;
+      
+      try {
+        // Try with preferred constraints first
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch (firstError: any) {
+        // If front camera fails, try with any available camera
+        if (firstError.name === 'OverconstrainedError' || firstError.name === 'ConstraintNotSatisfiedError') {
+          console.log('Front camera not available, trying any camera...');
+          const fallbackConstraints: MediaStreamConstraints = {
+            video: {
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            }
+          };
+          stream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
+        } else {
+          throw firstError;
+        }
+      }
+
+      streamRef.current = stream;
+      
+      // Wait for video element to be ready
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play().catch((playErr) => {
+            console.error('Error playing video:', playErr);
+            setError('Could not start camera preview. Please try again.');
+            setShowCamera(false);
+            setVideoReady(false);
+            if (streamRef.current) {
+              streamRef.current.getTracks().forEach((track) => track.stop());
+              streamRef.current = null;
+            }
+          });
+        }
+      }, 100);
+    } catch (err: any) {
+      console.error('Error accessing camera:', err);
+      setShowCamera(false);
+      setVideoReady(false);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Could not access camera. ';
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        errorMessage += 'Please allow camera access in your browser settings and try again.';
+      } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        errorMessage += 'No camera found on this device.';
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        errorMessage += 'Camera is being used by another application.';
+      } else if (err.name === 'OverconstrainedError' || err.name === 'ConstraintNotSatisfiedError') {
+        errorMessage += 'Camera does not support the requested settings.';
+      } else {
+        errorMessage += `Error: ${err.message || 'Unknown error'}. Please use file upload instead.`;
+      }
+      
+      setError(errorMessage);
+    }
   };
 
   const capturePhoto = () => {
