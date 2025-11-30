@@ -53,6 +53,7 @@ export function PhotoUpload({
   };
 
   const [showCamera, setShowCamera] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
@@ -85,6 +86,7 @@ export function PhotoUpload({
       })
       .then((stream) => {
         streamRef.current = stream;
+        setVideoReady(false);
         // Use a small delay to ensure video element is ready
         setTimeout(() => {
           if (videoRef.current) {
@@ -93,6 +95,7 @@ export function PhotoUpload({
               console.error('Error playing video:', playErr);
               setError('Could not start camera preview. Please try again.');
               setShowCamera(false);
+              setVideoReady(false);
               if (streamRef.current) {
                 streamRef.current.getTracks().forEach((track) => track.stop());
                 streamRef.current = null;
@@ -124,59 +127,81 @@ export function PhotoUpload({
   };
 
   const capturePhoto = () => {
-    if (!videoRef.current) return;
+    if (!videoRef.current || !streamRef.current) {
+      setError('Camera not ready. Please wait a moment and try again.');
+      return;
+    }
 
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Maintain 9:16 aspect ratio for portrait mode
     const videoWidth = videoRef.current.videoWidth;
     const videoHeight = videoRef.current.videoHeight;
-    const targetAspectRatio = 9 / 16; // Portrait 9:16
-    
-    let width = videoWidth;
-    let height = videoHeight;
-    let sourceX = 0;
-    let sourceY = 0;
-    let sourceWidth = videoWidth;
-    let sourceHeight = videoHeight;
-    
-    // Calculate dimensions to maintain 9:16 aspect ratio
-    const currentAspectRatio = videoWidth / videoHeight;
-    
-    if (currentAspectRatio > targetAspectRatio) {
-      // Video is wider than 9:16, crop width
-      sourceWidth = videoHeight * targetAspectRatio;
-      sourceX = (videoWidth - sourceWidth) / 2;
-      width = sourceWidth;
-      height = videoHeight;
-    } else {
-      // Video is taller than 9:16, crop height
-      sourceHeight = videoWidth / targetAspectRatio;
-      sourceY = (videoHeight - sourceHeight) / 2;
-      width = videoWidth;
-      height = sourceHeight;
-    }
-    
-    canvas.width = width;
-    canvas.height = height;
-    ctx.drawImage(videoRef.current, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
 
-    // Stop the camera stream
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
+    // Check if video has valid dimensions
+    if (!videoWidth || !videoHeight || videoWidth === 0 || videoHeight === 0) {
+      setError('Video not ready yet. Please wait a moment and try again.');
+      return;
     }
 
-    canvas.toBlob((blob) => {
-      if (blob) {
-        const file = new File([blob], `photo-${Date.now()}.jpg`, { type: 'image/jpeg' });
-        setPhotoFile(file);
-        setPhoto(canvas.toDataURL('image/jpeg'));
-        setShowCamera(false);
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        setError('Could not create canvas. Please try again.');
+        return;
       }
-    }, 'image/jpeg', 0.9);
+
+      // Maintain 9:16 aspect ratio for portrait mode
+      const targetAspectRatio = 9 / 16; // Portrait 9:16
+      
+      let width = videoWidth;
+      let height = videoHeight;
+      let sourceX = 0;
+      let sourceY = 0;
+      let sourceWidth = videoWidth;
+      let sourceHeight = videoHeight;
+      
+      // Calculate dimensions to maintain 9:16 aspect ratio
+      const currentAspectRatio = videoWidth / videoHeight;
+      
+      if (currentAspectRatio > targetAspectRatio) {
+        // Video is wider than 9:16, crop width
+        sourceWidth = videoHeight * targetAspectRatio;
+        sourceX = (videoWidth - sourceWidth) / 2;
+        width = sourceWidth;
+        height = videoHeight;
+      } else {
+        // Video is taller than 9:16, crop height
+        sourceHeight = videoWidth / targetAspectRatio;
+        sourceY = (videoHeight - sourceHeight) / 2;
+        width = videoWidth;
+        height = sourceHeight;
+      }
+      
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(videoRef.current, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+
+      // Stop the camera stream
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+      }
+      setVideoReady(false);
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], `photo-${Date.now()}.jpg`, { type: 'image/jpeg' });
+          setPhotoFile(file);
+          setPhoto(canvas.toDataURL('image/jpeg'));
+          setShowCamera(false);
+          setError(null);
+        } else {
+          setError('Failed to capture photo. Please try again.');
+        }
+      }, 'image/jpeg', 0.9);
+    } catch (err) {
+      console.error('Error capturing photo:', err);
+      setError('Failed to capture photo. Please try again.');
+    }
   };
 
   const cancelCamera = () => {
@@ -185,6 +210,7 @@ export function PhotoUpload({
       streamRef.current = null;
     }
     setShowCamera(false);
+    setVideoReady(false);
   };
 
   const getRandomFoundMessage = (): string => {
@@ -977,11 +1003,35 @@ Who's joining me? 👇
   // Handle video element when camera is shown
   useEffect(() => {
     if (showCamera && videoRef.current && streamRef.current) {
-      videoRef.current.srcObject = streamRef.current;
-      videoRef.current.play().catch((err) => {
+      const video = videoRef.current;
+      video.srcObject = streamRef.current;
+      
+      const handleLoadedMetadata = () => {
+        // Video metadata is loaded, check if dimensions are valid
+        if (video.videoWidth > 0 && video.videoHeight > 0) {
+          setVideoReady(true);
+        }
+      };
+
+      const handleError = (err: Event) => {
         console.error('Error playing video stream:', err);
         setError('Could not start camera preview. Please try again.');
+        setVideoReady(false);
+      };
+
+      video.addEventListener('loadedmetadata', handleLoadedMetadata);
+      video.addEventListener('error', handleError);
+      
+      video.play().catch((err) => {
+        console.error('Error playing video:', err);
+        setError('Could not start camera preview. Please try again.');
+        setVideoReady(false);
       });
+
+      return () => {
+        video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        video.removeEventListener('error', handleError);
+      };
     }
   }, [showCamera]);
 
@@ -1191,7 +1241,7 @@ Who's joining me? 👇
               type="button"
               onClick={capturePhoto}
               className="btn-cta flex-1 w-full sm:w-auto flex items-center justify-center gap-2"
-              disabled={!streamRef.current}
+              disabled={!streamRef.current || !videoReady}
             >
               <Camera className="w-5 h-5" />
               {t('capturePhoto')}
