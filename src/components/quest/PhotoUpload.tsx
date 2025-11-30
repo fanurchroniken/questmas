@@ -1024,7 +1024,7 @@ Who's joining me? 👇
                   </p>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     type="button"
                     onClick={async () => {
@@ -1053,7 +1053,7 @@ Who's joining me? 👇
                         }
                       }
                     }}
-                    className="btn-secondary flex-1"
+                    className="btn-secondary flex-1 w-full sm:w-auto"
                   >
                     {t('useRandom')}
                   </button>
@@ -1065,7 +1065,7 @@ Who's joining me? 👇
                       }
                     }}
                     disabled={isUpdatingPreview || !customFoundMessage}
-                    className="btn-secondary flex-1"
+                    className="btn-secondary flex-1 w-full sm:w-auto"
                   >
                     {isUpdatingPreview ? t('processing') : t('updatePreview')}
                   </button>
@@ -1074,7 +1074,7 @@ Who's joining me? 👇
                     onClick={() => {
                       setShowEditTextModal(false);
                     }}
-                    className="btn-cta flex-1"
+                    className="btn-cta flex-1 w-full sm:w-auto"
                   >
                     {t('done')}
                   </button>
@@ -1122,18 +1122,18 @@ Who's joining me? 👇
               </button>
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               type="button"
               onClick={cancelCamera}
-              className="btn-secondary flex-1"
+              className="btn-secondary flex-1 w-full sm:w-auto"
             >
               {t('cancel')}
             </button>
             <button
               type="button"
               onClick={capturePhoto}
-              className="btn-cta flex-1 flex items-center justify-center gap-2"
+              className="btn-cta flex-1 w-full sm:w-auto flex items-center justify-center gap-2"
             >
               <Camera className="w-5 h-5" />
               {t('capturePhoto')}
@@ -1147,11 +1147,11 @@ Who's joining me? 👇
             <p className="text-stormy-sky mb-4">
               📸 {t('findAndCaptureMoment')} 🎄
             </p>
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-stretch sm:items-center">
               <button
                 type="button"
                 onClick={handleCameraCapture}
-                className="btn-primary flex items-center gap-2"
+                className="btn-primary flex items-center justify-center gap-2 w-full sm:w-auto"
               >
                 <Camera className="w-4 h-4" />
                 {t('takePhoto')}
@@ -1159,7 +1159,7 @@ Who's joining me? 👇
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="btn-secondary flex items-center gap-2"
+                className="btn-secondary flex items-center justify-center gap-2 w-full sm:w-auto"
               >
                 <Upload className="w-4 h-4" />
                 {t('uploadPhoto')}
@@ -1171,7 +1171,6 @@ Who's joining me? 👇
               accept="image/*"
               onChange={handleFileSelect}
               className="hidden"
-              capture="environment"
             />
           </div>
         </div>
@@ -1207,11 +1206,11 @@ Who's joining me? 👇
             </div>
           )}
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               type="button"
               onClick={handleEditText}
-              className="btn-secondary flex items-center gap-2 flex-1"
+              className="btn-secondary flex items-center justify-center gap-2 flex-1 w-full sm:w-auto"
               disabled={uploading || loading}
             >
               <Edit2 className="w-4 h-4" />
@@ -1220,7 +1219,7 @@ Who's joining me? 👇
             <button
               type="button"
               onClick={handleShare}
-              className="btn-secondary flex items-center gap-2 flex-1"
+              className="btn-secondary flex items-center justify-center gap-2 flex-1 w-full sm:w-auto"
               disabled={uploading || loading}
             >
               <Share2 className="w-4 h-4" />
@@ -1229,7 +1228,7 @@ Who's joining me? 👇
             <button
               type="button"
               onClick={handleComplete}
-              className="btn-cta flex items-center gap-2 flex-1"
+              className="btn-cta flex items-center justify-center gap-2 flex-1 w-full sm:w-auto"
               disabled={uploading || loading}
             >
               {uploading ? t('processing') : t('completeChallenge')}
