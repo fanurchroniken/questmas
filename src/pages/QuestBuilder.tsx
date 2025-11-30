@@ -21,7 +21,7 @@ import {
   type CreateQuestInput,
   type CreateTaskInput,
 } from '@/lib/services/questService';
-import { ArrowLeft, Save, Eye, Calendar, Plus, Trash2, Share2, Grid3x3, List, Edit2, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, Save, Eye, Calendar, Plus, Trash2, Share2, Grid3x3, List, Edit2, ChevronDown, ChevronUp, Menu, X } from 'lucide-react';
 import { ShareButtons } from '@/components/sharing/ShareButtons';
 import { PersonalizedShareModal } from '@/components/sharing/PersonalizedShareModal';
 import { format } from 'date-fns';
@@ -44,6 +44,7 @@ export default function QuestBuilder() {
   const [isQuestDetailsOpen, setIsQuestDetailsOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showPersonalizedShare, setShowPersonalizedShare] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (id && !authLoading && user) {
@@ -335,27 +336,29 @@ export default function QuestBuilder() {
       <nav className="bg-cream shadow-sm border-b border-cream-dark/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="text-stormy-sky hover:text-deep-teal"
+                className="text-stormy-sky hover:text-deep-teal flex-shrink-0"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
-              <h1 className="text-xl font-primary font-bold text-deep-teal">
+              <h1 className="text-base sm:text-xl font-primary font-bold text-deep-teal truncate">
                 {isNewQuest ? t('createNewQuest') : t('editQuestTitle')}
               </h1>
             </div>
-            <div className="flex items-center gap-2">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-2">
               <LanguageSwitcher />
               {quest && (
-                <button onClick={handlePreview} className="btn-secondary flex items-center gap-2">
+                <button onClick={handlePreview} className="btn-secondary flex items-center gap-2 text-sm">
                   <Eye className="w-4 h-4" />
                   {t('preview')}
                 </button>
               )}
               {quest && quest.status !== 'published' && (
-                <button onClick={handlePublish} className="btn-cta flex items-center gap-2">
+                <button onClick={handlePublish} className="btn-cta flex items-center gap-2 text-sm">
                   <Calendar className="w-4 h-4" />
                   {t('publish')}
                 </button>
@@ -363,7 +366,7 @@ export default function QuestBuilder() {
               {quest && (
                 <button
                   onClick={handleDelete}
-                  className="btn-secondary flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                  className="btn-secondary flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50 text-sm"
                   disabled={deleting}
                 >
                   <Trash2 className="w-4 h-4" />
@@ -371,7 +374,66 @@ export default function QuestBuilder() {
                 </button>
               )}
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 text-stormy-sky hover:text-deep-teal rounded-lg transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-cream-dark/20 py-4 space-y-3">
+              <div className="px-2">
+                <LanguageSwitcher fullWidth={true} />
+              </div>
+              {quest && (
+                <button 
+                  onClick={() => {
+                    handlePreview();
+                    setMobileMenuOpen(false);
+                  }} 
+                  className="w-full btn-secondary flex items-center justify-center gap-2 text-sm"
+                >
+                  <Eye className="w-4 h-4" />
+                  {t('preview')}
+                </button>
+              )}
+              {quest && quest.status !== 'published' && (
+                <button 
+                  onClick={() => {
+                    handlePublish();
+                    setMobileMenuOpen(false);
+                  }} 
+                  className="w-full btn-cta flex items-center justify-center gap-2 text-sm"
+                >
+                  <Calendar className="w-4 h-4" />
+                  {t('publish')}
+                </button>
+              )}
+              {quest && (
+                <button
+                  onClick={() => {
+                    handleDelete();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full btn-secondary flex items-center justify-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50 text-sm"
+                  disabled={deleting}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {deleting ? t('loading') : t('delete')}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </nav>
 

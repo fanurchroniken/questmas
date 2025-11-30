@@ -24,7 +24,7 @@ export default function QuestParticipant() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const { getTestDate } = useTestMode();
+  const { isTestMode, getTestDate } = useTestMode();
   const [quest, setQuest] = useState<Quest | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [participant, setParticipant] = useState<QuestParticipant | null>(null);
@@ -172,6 +172,12 @@ export default function QuestParticipant() {
   };
 
   const isTaskUnlocked = (task: Task): boolean => {
+    // If test mode is ON, unlock all tasks
+    if (isTestMode) {
+      return true;
+    }
+    
+    // Otherwise, follow the defined rules
     if (task.unlock_trigger === 'date') {
       const unlockDate = task.unlock_condition?.date as string;
       if (unlockDate) {
