@@ -77,7 +77,7 @@ export function PhotoUpload({
     navigator.mediaDevices
       .getUserMedia({ 
         video: { 
-          facingMode: 'environment', // Prefer back camera on mobile
+          facingMode: 'user', // Use front camera on mobile
           // More flexible constraints for better compatibility
           width: { ideal: 1280, max: 1920 },
           height: { ideal: 720, max: 1080 }

@@ -50,10 +50,12 @@
 
 .snowflake {
   position: absolute;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 1em;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.2em;
   animation: snowfall 10s linear infinite;
   pointer-events: none;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  z-index: 100;
 }
 
 /* Sparkle animation */
@@ -74,8 +76,8 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-forest-light text-white px-6 py-2 rounded-lg font-medium hover:bg-forest-dark transition-colors;
-    @apply focus:outline-none focus:ring-2 focus:ring-forest-light focus:ring-offset-2;
+    @apply bg-deep-teal text-white px-6 py-2 rounded-lg font-medium hover:bg-forest-dark transition-colors;
+    @apply focus:outline-none focus:ring-2 focus:ring-deep-teal focus:ring-offset-2;
     font-family: 'Poppins', sans-serif;
   }
 
