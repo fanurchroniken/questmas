@@ -1,7 +1,6 @@
 node_modules
 dist
 .env.local
-.env
 .git
 .gitignore
 README.md
@@ -10,4 +9,5 @@ README.md
 *.log
 coverage
 .DS_Store
+# Note: .env is created during build, so don't exclude it
 

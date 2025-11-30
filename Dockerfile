@@ -12,16 +12,32 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build arguments for environment variables
+# Accept build arguments (Coolify may pass these)
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
 
-# Set environment variables for build
+# Also accept as environment variables (Coolify may set these directly)
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
+# Make build script executable and use it
+# This script creates .env file from environment variables
+RUN chmod +x scripts/build.sh || true
+
 # Build the application
-RUN npm run build
+# Create .env file from environment variables for Vite
+# Coolify may pass these as ARG or ENV, so we check both
+RUN if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then \
+      echo "ERROR: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be set!" && \
+      echo "Please set these as environment variables in Coolify with 'Build Time' enabled." && \
+      echo "Current VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-NOT SET}" && \
+      echo "Current VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:+SET}${VITE_SUPABASE_ANON_KEY:-NOT SET}" && \
+      exit 1; \
+    fi && \
+    echo "VITE_SUPABASE_URL=$VITE_SUPABASE_URL" > .env && \
+    echo "VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY" >> .env && \
+    echo "Environment variables configured for build" && \
+    npm run build
 
 # Production stage
 FROM nginx:alpine
