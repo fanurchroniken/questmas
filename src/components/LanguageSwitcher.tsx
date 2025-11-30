@@ -2,7 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 import { useState } from 'react';
 
-export function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  fullWidth?: boolean;
+}
+
+export function LanguageSwitcher({ fullWidth = false }: LanguageSwitcherProps) {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,10 +24,10 @@ export function LanguageSwitcher() {
   };
 
   return (
-    <div className="relative">
+    <div className={`relative ${fullWidth ? 'w-full' : ''}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="btn-secondary flex items-center gap-2"
+        className={`btn-secondary flex items-center gap-2 ${fullWidth ? 'w-full justify-center' : ''}`}
       >
         <Globe className="w-4 h-4" />
         <span>{currentLanguage.name}</span>

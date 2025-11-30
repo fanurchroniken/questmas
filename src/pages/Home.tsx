@@ -145,7 +145,7 @@ export default function Home() {
           {mobileMenuOpen && (
             <div className="md:hidden border-t border-luxury-gold/20 py-4 space-y-3">
               <div className="px-2">
-                <LanguageSwitcher />
+                <LanguageSwitcher fullWidth={true} />
               </div>
               {user ? (
                 <>
@@ -283,7 +283,7 @@ export default function Home() {
                   </Link>
                   <Link 
                     to="/login" 
-                    className="btn-secondary text-base sm:text-lg lg:text-xl px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 border-2 border-cream/50 text-cream hover:bg-cream/10 font-heading w-full sm:w-auto text-center"
+                    className="bg-deep-teal text-white text-base sm:text-lg lg:text-xl px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-lg font-medium hover:bg-forest-dark transition-colors font-heading w-full sm:w-auto text-center"
                   >
                     {t('login')}
                   </Link>
@@ -508,19 +508,6 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Feature 3 */}
-              <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl hover:shadow-2xl hover:shadow-glow-gold transition-all border-2 border-transparent hover:border-luxury-gold/30 group">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-christmas-green to-green-600 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                  <MapPin className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
-                </div>
-                <h3 className="text-xl sm:text-2xl font-heading font-bold text-forest-dark mb-2 sm:mb-3">
-                  {t('locationBased') || 'Location-Based'}
-                </h3>
-                <p className="text-forest-dark/80 leading-relaxed font-body text-sm sm:text-base">
-                  {t('locationBasedDescription') || 'Create real-world adventures that guide people to discover special places'}
-                </p>
-              </div>
-
               {/* Feature 4 */}
               <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl hover:shadow-2xl hover:shadow-glow-gold transition-all border-2 border-transparent hover:border-luxury-gold/30 group">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-luxury-gold to-gold-light rounded-2xl sm:rounded-3xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-lg">
@@ -678,9 +665,8 @@ export default function Home() {
               <div>
                 <h4 className="text-cream font-heading font-semibold mb-4">Legal</h4>
                 <ul className="space-y-2 text-sm text-cream/70 font-body">
-                  <li><Link to="/" className="hover:text-luxury-gold transition-colors">Privacy</Link></li>
-                  <li><Link to="/" className="hover:text-luxury-gold transition-colors">Terms</Link></li>
-                  <li><Link to="/" className="hover:text-luxury-gold transition-colors">Cookies</Link></li>
+                  <li><Link to="/privacy" className="hover:text-luxury-gold transition-colors">Datenschutz</Link></li>
+                  <li><Link to="/imprint" className="hover:text-luxury-gold transition-colors">Impressum</Link></li>
                 </ul>
               </div>
             </div>

@@ -11,6 +11,8 @@ import QuestView from '@/pages/QuestView';
 import QuestParticipant from '@/pages/QuestParticipant';
 import QuestAnalytics from '@/pages/QuestAnalytics';
 import AccessCalendar from '@/pages/AccessCalendar';
+import Privacy from '@/pages/Privacy';
+import Imprint from '@/pages/Imprint';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,6 +33,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/access" element={<AccessCalendar />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/imprint" element={<Imprint />} />
             <Route
               path="/dashboard"
               element={
