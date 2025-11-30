@@ -11,11 +11,27 @@ interface TestModeContextType {
 const TestModeContext = createContext<TestModeContextType | undefined>(undefined);
 
 export function TestModeProvider({ children }: { children: ReactNode }) {
-  const [isTestMode, setIsTestMode] = useState(false);
-  const [testDateOffset, setTestDateOffset] = useState(0);
+  // Load test mode from localStorage on initialization
+  const [isTestMode, setIsTestMode] = useState(() => {
+    const saved = localStorage.getItem('questmas_test_mode');
+    return saved === 'true';
+  });
+  const [testDateOffset, setTestDateOffset] = useState(() => {
+    const saved = localStorage.getItem('questmas_test_date_offset');
+    return saved ? parseInt(saved, 10) : 0;
+  });
 
   const toggleTestMode = () => {
-    setIsTestMode((prev) => !prev);
+    setIsTestMode((prev) => {
+      const newValue = !prev;
+      localStorage.setItem('questmas_test_mode', String(newValue));
+      return newValue;
+    });
+  };
+
+  const handleSetTestDateOffset = (days: number) => {
+    setTestDateOffset(days);
+    localStorage.setItem('questmas_test_date_offset', String(days));
   };
 
   const getTestDate = (): Date => {
@@ -33,7 +49,7 @@ export function TestModeProvider({ children }: { children: ReactNode }) {
         isTestMode,
         testDateOffset,
         toggleTestMode,
-        setTestDateOffset,
+        setTestDateOffset: handleSetTestDateOffset,
         getTestDate,
       }}
     >

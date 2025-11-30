@@ -33,6 +33,12 @@ export default function QuestParticipant() {
   const [loading, setLoading] = useState(true);
   const [completing, setCompleting] = useState(false);
 
+  // Debug: Log test mode state
+  useEffect(() => {
+    console.log('QuestParticipant - Test mode state:', isTestMode);
+    console.log('QuestParticipant - localStorage test_mode:', localStorage.getItem('questmas_test_mode'));
+  }, [isTestMode]);
+
   useEffect(() => {
     if (id) {
       loadQuest();
@@ -174,6 +180,7 @@ export default function QuestParticipant() {
   const isTaskUnlocked = (task: Task): boolean => {
     // If test mode is ON, unlock all tasks
     if (isTestMode) {
+      console.log('Test mode ON: unlocking task', task.id, task.title);
       return true;
     }
     
@@ -183,7 +190,11 @@ export default function QuestParticipant() {
       if (unlockDate) {
         const today = startOfDay(getTestDate()); // Use test date if in test mode
         const unlock = startOfDay(parseISO(unlockDate));
-        return !isBefore(today, unlock);
+        const isUnlocked = !isBefore(today, unlock);
+        if (!isUnlocked) {
+          console.log('Task locked by date:', { taskId: task.id, today: today.toISOString(), unlock: unlock.toISOString() });
+        }
+        return isUnlocked;
       }
     } else if (task.unlock_trigger === 'sequential') {
       const taskIndex = tasks.findIndex((t) => t.id === task.id);
@@ -363,6 +374,11 @@ export default function QuestParticipant() {
             <p className="text-sm text-forest-dark">
               <strong>Preview Mode:</strong> {tasks.length} tasks loaded. Test date: {getTestDate().toLocaleDateString()}
             </p>
+            {isTestMode && (
+              <p className="text-sm text-green-700 font-semibold mt-2">
+                ✓ Test Mode ON: All doors are unlocked
+              </p>
+            )}
           </div>
         )}
         {allCompleted ? (
