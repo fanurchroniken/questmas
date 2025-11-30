@@ -42,6 +42,10 @@ RUN if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then \
 # Production stage
 FROM nginx:alpine
 
+# Ensure JavaScript files are mapped to application/javascript in mime.types
+# Replace any text/javascript entries with application/javascript
+RUN sed -i 's|text/javascript|application/javascript|g' /etc/nginx/mime.types
+
 # Copy built files to nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
 
