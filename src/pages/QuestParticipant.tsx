@@ -324,33 +324,26 @@ export default function QuestParticipant() {
       <nav className="bg-cream shadow-sm border-b border-cream-dark/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
               <button
                 onClick={() => navigate(-1)}
-                className="text-forest-dark hover:text-forest-light"
+                className="text-forest-dark hover:text-forest-light flex-shrink-0"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
-              <h1 className="text-xl font-primary font-bold text-cream">{quest.title}</h1>
+              <h1 className="text-base sm:text-xl font-primary font-bold text-cream truncate">{quest.title}</h1>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
               <LanguageSwitcher />
-              <div className="text-sm text-cream/90">
-                {isChristmasCalendar ? (
-                  <>🎄 {completedCount} / {totalTasks} {t('doorsOpened')}</>
-                ) : (
-                  <>{completedCount} / {totalTasks} {t('completed')}</>
-                )}
-              </div>
               {activeParticipant && activeParticipant.total_points > 0 && (
-                <div className="flex items-center gap-1 text-pirate-gold font-semibold">
+                <div className="hidden sm:flex items-center gap-1 text-pirate-gold font-semibold text-sm">
                   <Trophy className="w-4 h-4" />
                   {activeParticipant.total_points} points
                 </div>
               )}
               {isCreatorPreview && (
-                <div className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                  Preview Mode
+                <div className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded whitespace-nowrap">
+                  Preview
                 </div>
               )}
             </div>
