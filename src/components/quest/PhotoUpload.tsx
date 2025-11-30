@@ -57,34 +57,70 @@ export function PhotoUpload({
   const streamRef = useRef<MediaStream | null>(null);
 
   const handleCameraCapture = () => {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      setShowCamera(true);
-      setError(null);
-      
-      navigator.mediaDevices
-        .getUserMedia({ 
-          video: { 
-            facingMode: 'environment', // Prefer back camera on mobile
-            aspectRatio: { ideal: 9 / 16 }, // 9:16 portrait mode for mobile
-            width: { ideal: 1080 }, // Portrait width
-            height: { ideal: 1920 } // Portrait height (9:16 ratio)
-          } 
-        })
-        .then((stream) => {
-          streamRef.current = stream;
+    // Check if we're on HTTPS (required for camera access on mobile)
+    const isSecure = window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (!isSecure) {
+      setError('Camera access requires HTTPS. Please use file upload or enable HTTPS for your site.');
+      return;
+    }
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setError('Camera not available in this browser. Please use file upload instead.');
+      return;
+    }
+
+    setShowCamera(true);
+    setError(null);
+    
+    // Request camera with more flexible constraints for better mobile compatibility
+    navigator.mediaDevices
+      .getUserMedia({ 
+        video: { 
+          facingMode: 'environment', // Prefer back camera on mobile
+          // More flexible constraints for better compatibility
+          width: { ideal: 1280, max: 1920 },
+          height: { ideal: 720, max: 1080 }
+        } 
+      })
+      .then((stream) => {
+        streamRef.current = stream;
+        // Use a small delay to ensure video element is ready
+        setTimeout(() => {
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
-            videoRef.current.play();
+            videoRef.current.play().catch((playErr) => {
+              console.error('Error playing video:', playErr);
+              setError('Could not start camera preview. Please try again.');
+              setShowCamera(false);
+              if (streamRef.current) {
+                streamRef.current.getTracks().forEach((track) => track.stop());
+                streamRef.current = null;
+              }
+            });
           }
-        })
-        .catch((err) => {
-          console.error('Error accessing camera:', err);
-          setError('Could not access camera. Please use file upload instead.');
-          setShowCamera(false);
-        });
-    } else {
-      setError('Camera not available. Please use file upload.');
-    }
+        }, 100);
+      })
+      .catch((err) => {
+        console.error('Error accessing camera:', err);
+        setShowCamera(false);
+        
+        // Provide more specific error messages
+        let errorMessage = 'Could not access camera. ';
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          errorMessage += 'Please allow camera access in your browser settings and try again.';
+        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+          errorMessage += 'No camera found on this device.';
+        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+          errorMessage += 'Camera is being used by another application.';
+        } else if (err.name === 'OverconstrainedError' || err.name === 'ConstraintNotSatisfiedError') {
+          errorMessage += 'Camera does not support the requested settings.';
+        } else {
+          errorMessage += 'Please use file upload instead.';
+        }
+        
+        setError(errorMessage);
+      });
   };
 
   const capturePhoto = () => {
@@ -938,11 +974,23 @@ Who's joining me? 👇
     }, 100);
   };
 
+  // Handle video element when camera is shown
+  useEffect(() => {
+    if (showCamera && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play().catch((err) => {
+        console.error('Error playing video stream:', err);
+        setError('Could not start camera preview. Please try again.');
+      });
+    }
+  }, [showCamera]);
+
   // Cleanup camera stream on unmount
   useEffect(() => {
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
       }
     };
   }, []);
@@ -1103,6 +1151,11 @@ Who's joining me? 👇
       <div className="space-y-4">
       {showCamera ? (
         <div className="space-y-4">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+              {error}
+            </div>
+          )}
           <div className="relative bg-black rounded-lg overflow-hidden">
             <video
               ref={videoRef}
@@ -1111,6 +1164,10 @@ Who's joining me? 👇
               muted
               className="w-full max-h-[80vh] object-contain"
               style={{ aspectRatio: '9/16' }}
+              onError={(e) => {
+                console.error('Video element error:', e);
+                setError('Camera preview failed. Please try again or use file upload.');
+              }}
             />
             <div className="absolute top-4 right-4">
               <button
@@ -1134,6 +1191,7 @@ Who's joining me? 👇
               type="button"
               onClick={capturePhoto}
               className="btn-cta flex-1 w-full sm:w-auto flex items-center justify-center gap-2"
+              disabled={!streamRef.current}
             >
               <Camera className="w-5 h-5" />
               {t('capturePhoto')}
@@ -1142,6 +1200,12 @@ Who's joining me? 👇
         </div>
       ) : !photo ? (
         <div className="space-y-3">
+          {window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && (
+            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg">
+              <p className="text-sm font-semibold mb-1">⚠️ Camera requires HTTPS</p>
+              <p className="text-xs">Camera access is only available over HTTPS. Please enable HTTPS for your site or use the file upload option.</p>
+            </div>
+          )}
           <div className="border-2 border-dashed border-stormy-sky rounded-lg p-8 text-center">
                 <Camera className="w-12 h-12 text-stormy-sky mx-auto mb-4" />
             <p className="text-stormy-sky mb-4">
