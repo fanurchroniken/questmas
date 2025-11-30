@@ -368,6 +368,15 @@ export default function QuestParticipant() {
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Test Mode Indicator */}
+        {isTestMode && (
+          <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-400 rounded-lg">
+            <p className="text-sm text-yellow-800 font-semibold">
+              🧪 Test Mode ON: All calendar doors are unlocked for testing
+            </p>
+          </div>
+        )}
+        
         {/* Debug info in preview mode */}
         {isCreatorPreview && (
           <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
