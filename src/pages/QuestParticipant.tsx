@@ -200,6 +200,8 @@ export default function QuestParticipant() {
       return;
     }
 
+    if (!activeParticipant) return;
+
     setCompleting(true);
     try {
       await completeTask(activeParticipant.id, task.id, answer, task.points, photoUrl);
@@ -315,7 +317,7 @@ export default function QuestParticipant() {
   const isChristmasCalendar = quest.quest_type === 'christmas_calendar';
   const completedCount = completions.length;
   const totalTasks = tasks.length;
-  const allCompleted = activeParticipant.status === 'completed' || completedCount === totalTasks;
+  const allCompleted = activeParticipant?.status === 'completed' || completedCount === totalTasks;
 
   return (
     <div className="min-h-screen bg-forest-dark">
@@ -340,7 +342,7 @@ export default function QuestParticipant() {
                   <>{completedCount} / {totalTasks} {t('completed')}</>
                 )}
               </div>
-              {activeParticipant.total_points > 0 && (
+              {activeParticipant && activeParticipant.total_points > 0 && (
                 <div className="flex items-center gap-1 text-pirate-gold font-semibold">
                   <Trophy className="w-4 h-4" />
                   {activeParticipant.total_points} points
@@ -381,7 +383,7 @@ export default function QuestParticipant() {
               )}
             </p>
             <div className="text-2xl font-bold text-pirate-gold mb-6">
-              {t('totalPointsLabel')} {activeParticipant.total_points}
+              {t('totalPointsLabel')} {activeParticipant?.total_points ?? 0}
             </div>
             <button onClick={() => navigate('/')} className="btn-primary">
               {t('goHome')}

@@ -6,6 +6,15 @@ import { X, Plus, Trash2 } from 'lucide-react';
 import { Task } from '@/lib/services/questService';
 import { useTranslation } from 'react-i18next';
 
+interface TaskEditorProps {
+  task?: Task;
+  questId: string;
+  orderIndex: number;
+  onSave: (taskData: Omit<Task, 'id' | 'created_at' | 'updated_at'>) => void;
+  onCancel: () => void;
+  onDelete?: () => void;
+}
+
 export function TaskEditor({
   task,
   questId,
@@ -28,15 +37,6 @@ export function TaskEditor({
 });
 
 type TaskFormData = z.infer<typeof taskSchema>;
-
-interface TaskEditorProps {
-  task?: Task;
-  questId: string;
-  orderIndex: number;
-  onSave: (taskData: Omit<Task, 'id' | 'created_at' | 'updated_at'>) => void;
-  onCancel: () => void;
-  onDelete?: () => void;
-}
 
   const [hints, setHints] = useState<Array<{ text: string; cost?: number }>>(
     task?.hints || []

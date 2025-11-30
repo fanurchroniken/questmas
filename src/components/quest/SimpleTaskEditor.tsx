@@ -5,6 +5,17 @@ import { X } from 'lucide-react';
 import { Task } from '@/lib/services/questService';
 import { useTranslation } from 'react-i18next';
 
+interface SimpleTaskEditorProps {
+  task: Task;
+  onSave: (taskData: {
+    title?: string;
+    instructions: string;
+    location_description?: string;
+  }) => void;
+  onCancel: () => void;
+  loading?: boolean;
+}
+
 export function SimpleTaskEditor({
   task,
   onSave,
@@ -20,17 +31,6 @@ export function SimpleTaskEditor({
   });
 
 type SimpleTaskFormData = z.infer<typeof simpleTaskSchema>;
-
-interface SimpleTaskEditorProps {
-  task: Task;
-  onSave: (taskData: {
-    title?: string;
-    instructions: string;
-    location_description?: string;
-  }) => void;
-  onCancel: () => void;
-  loading?: boolean;
-}
 
   const {
     register,

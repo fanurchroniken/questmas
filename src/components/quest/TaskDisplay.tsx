@@ -251,7 +251,7 @@ export function TaskDisplay({
             )}
             <button
               type="submit"
-              disabled={loading || (task.correct_answer && !answer.trim())}
+              disabled={loading || (!!task.correct_answer && !answer.trim())}
               className="btn-primary flex-1"
             >
               {loading ? t('completing') : task.correct_answer ? t('submitAnswer') : t('markComplete')}

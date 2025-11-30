@@ -139,9 +139,9 @@ i18n
           startAdventCalendar: '🎄 Start Your Advent Calendar!',
           requiresAuth: 'This quest requires authentication. Please sign in to participate.',
           
-          // Quest Participant
+          // Quest Participant (first occurrence)
           doorsOpened: 'doors opened',
-          completed: 'completed',
+          completedParticipant: 'completed',
           allDoorsOpened: '🎄 All Doors Opened! 🎄',
           allDoorsOpenedMessage: 'Congratulations! You\'ve opened all {{count}} doors and completed your Christmas adventure! What a festive achievement! 🎁',
           questCompleteMessage: 'Congratulations! You\'ve completed all {{count}} tasks.',
@@ -182,7 +182,7 @@ i18n
           completeChallenge: 'Complete Challenge',
           takePhoto: 'Take Photo',
           uploadPhoto: 'Upload Photo',
-          cancel: 'Cancel',
+          cancelPhoto: 'Cancel',
           capturePhoto: 'Capture Photo',
           
           // Calendar View
@@ -250,7 +250,7 @@ i18n
           // Quest Analytics
           analyticsTitle: 'Analytics: {{title}}',
           totalParticipants: 'Total Participants',
-          completed: 'Completed',
+          completedCount: 'Completed',
           avgPoints: 'Avg Points',
           activeNow: 'Active Now',
           participantsTitle: 'Participants',
@@ -344,10 +344,10 @@ i18n
           areYouSureDelete: 'Are you sure you want to delete this draft quest?',
           areYouSureDeletePublished: 'This quest is PUBLISHED. Deleting it will make it inaccessible to all participants. Are you absolutely sure?',
           complete: 'Complete',
-          incomplete: 'Incomplete',
-          empty: 'Empty',
-          answer: 'Answer',
-          riddle: 'Riddle',
+          incompleteStatus: 'Incomplete',
+          emptyStatus: 'Empty',
+          answerLabel: 'Answer',
+          riddleLabel: 'Riddle',
           hintCount: '{{count}} hint(s)',
           
           // Home Page
@@ -398,7 +398,7 @@ i18n
           solveAndFindDescription: 'They solve the daily riddle, visit the location, find the hidden gift, and share their discovery',
           howItWorks: 'How It Works',
           simpleSteps: 'Create your Christmas calendar in three simple steps',
-          createQuest: 'Create Your Quest',
+          createQuestHome: 'Create Your Quest',
           createQuestDescription: 'Set up your 24-day calendar, add challenges, and customize the experience',
           shareLink: 'Share the Link',
           shareLinkDescription: 'Get a unique link or QR code to share with friends, family, or customers',
@@ -407,28 +407,11 @@ i18n
           startCreatingToday: 'Start Creating Today',
           noCreditCard: 'No credit card required. Create unlimited Christmas calendars and share them with anyone.',
           foreverFree: 'Free This Year',
-          freeThisYear: 'Free This Year',
           unlimitedParticipants: 'Unlimited Participants',
           allFeatures: 'All Features Included',
           noAds: 'No Ads, No Limits',
           getStartedFree: 'Get Started Free',
           allRightsReserved: 'All rights reserved.',
-          
-          // Quest Participant
-          doorsOpened: 'doors opened',
-          completed: 'completed',
-          allDoorsOpened: '🎄 All Doors Opened! 🎄',
-          allDoorsOpenedMessage: 'Congratulations! You\'ve opened all {{count}} doors and completed your Christmas adventure! What a festive achievement! 🎁',
-          questCompleteMessage: 'Congratulations! You\'ve completed all {{count}} tasks.',
-          totalPointsLabel: 'Total Points:',
-          locked: 'Locked',
-          
-          // Dashboard
-          yourQuests: 'Your Quests',
-          createAndManage: 'Create and manage your interactive quests',
-          noQuestsYet: 'No quests yet. Create your first one!',
-          startBuilding: 'Start building your quest',
-          createNewQuestCard: 'Create New Quest',
           goToDashboard: 'Go to Dashboard',
         },
       },
@@ -604,7 +587,7 @@ i18n
           completeChallenge: 'Herausforderung abschließen',
           takePhoto: 'Foto aufnehmen',
           uploadPhoto: 'Foto hochladen',
-          cancel: 'Abbrechen',
+          cancelPhoto: 'Abbrechen',
           capturePhoto: 'Foto aufnehmen',
           
           // Calendar View
@@ -672,7 +655,7 @@ i18n
           // Quest Analytics
           analyticsTitle: 'Analysen: {{title}}',
           totalParticipants: 'Gesamtteilnehmer',
-          completed: 'Abgeschlossen',
+          completedCount: 'Abgeschlossen',
           avgPoints: 'Durchschn. Punkte',
           activeNow: 'Aktiv jetzt',
           participantsTitle: 'Teilnehmer',
@@ -806,7 +789,7 @@ i18n
           solveAndFindDescription: 'Sie lösen das tägliche Rätsel, besuchen den Ort, finden das versteckte Geschenk und teilen ihre Entdeckung',
           howItWorks: 'So funktioniert es',
           simpleSteps: 'Erstelle deinen Weihnachtskalender in drei einfachen Schritten',
-          createQuest: 'Erstelle deine Quest',
+          createQuestHome: 'Erstelle deine Quest',
           createQuestDescription: 'Richte deinen 24-Tage-Kalender ein, füge Herausforderungen hinzu und passe die Erfahrung an',
           shareLink: 'Teile den Link',
           shareLinkDescription: 'Erhalte einen eindeutigen Link oder QR-Code zum Teilen mit Freunden, Familie oder Kunden',
@@ -815,7 +798,6 @@ i18n
           startCreatingToday: 'Beginne noch heute',
           noCreditCard: 'Keine Kreditkarte erforderlich. Erstelle unbegrenzte Weihnachtskalender und teile sie mit jedem.',
           foreverFree: 'Dieses Jahr kostenlos',
-          freeThisYear: 'Dieses Jahr kostenlos',
           unlimitedParticipants: 'Unbegrenzte Teilnehmer',
           allFeatures: 'Alle Funktionen enthalten',
           noAds: 'Keine Werbung, keine Limits',
@@ -828,8 +810,8 @@ i18n
           readyToCreate: 'Bereit, Magie zu erschaffen?',
           startNow: 'Starte heute dein magisches Weihnachtskalender-Abenteuer',
           hintCount: '{{count}} Hinweis(e)',
-          answer: 'Antwort',
-          riddle: 'Rätsel',
+          answerLabel: 'Antwort',
+          riddleLabel: 'Rätsel',
         },
       },
     },

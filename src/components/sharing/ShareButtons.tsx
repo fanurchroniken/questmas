@@ -78,7 +78,7 @@ export function ShareButtons({ url, title, description, personalizedMessage }: S
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        {navigator.share && (
+        {typeof navigator.share === 'function' && (
           <button
             onClick={handleShare}
             className="btn-primary flex items-center gap-2"

@@ -359,7 +359,7 @@ export function PhotoUpload({
       });
       // Set cursor to end after update
       setTimeout(() => {
-        if (textareaRef.current) {
+        if (textareaRef.current && customFoundMessage) {
           const length = customFoundMessage.length;
           textareaRef.current.setSelectionRange(length, length);
           textareaRef.current.focus();
