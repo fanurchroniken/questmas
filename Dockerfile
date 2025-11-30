@@ -42,20 +42,28 @@ RUN if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then \
 # Production stage
 FROM nginx:alpine
 
+# Install envsubst for runtime templating
+RUN apk add --no-cache gettext
+
 # Ensure JavaScript files are mapped to application/javascript in mime.types
-# Replace any text/javascript entries with application/javascript
 RUN sed -i 's|text/javascript|application/javascript|g' /etc/nginx/mime.types
 
 # Copy built files to nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy nginx configuration with proper MIME types
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx configuration template
+COPY nginx.conf /etc/nginx/conf.d/default.conf.template
 
-# Test nginx configuration to ensure it's valid
-RUN nginx -t
+# Validate nginx config using default port (80) during build
+RUN PORT=80 envsubst '$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf \
+    && nginx -t \
+    && rm /etc/nginx/conf.d/default.conf
+
+# Copy runtime entrypoint
+COPY scripts/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/docker-entrypoint.sh"]
 
