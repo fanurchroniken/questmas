@@ -1314,11 +1314,11 @@ Who's joining me? 👇
               type="button"
               onClick={capturePhoto}
               className="btn-cta flex-1 w-full sm:w-auto flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!streamRef.current || (videoRef.current && videoRef.current.videoWidth === 0)}
-              title={!streamRef.current ? 'Camera not ready' : (videoRef.current && videoRef.current.videoWidth === 0) ? 'Waiting for camera...' : 'Capture photo'}
+              disabled={!streamRef.current || (videoRef.current?.videoWidth ?? 0) === 0}
+              title={!streamRef.current ? 'Camera not ready' : (videoRef.current?.videoWidth ?? 0) === 0 ? 'Waiting for camera...' : 'Capture photo'}
             >
               <Camera className="w-5 h-5" />
-              {!streamRef.current || (videoRef.current && videoRef.current.videoWidth === 0) ? t('waiting') || 'Waiting...' : t('capturePhoto')}
+              {!streamRef.current || (videoRef.current?.videoWidth ?? 0) === 0 ? t('waiting') || 'Waiting...' : t('capturePhoto')}
             </button>
           </div>
         </div>
