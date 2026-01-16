@@ -1,128 +1,72 @@
-# Captain's Quest - Questmas MVP
+# Writer's SaaS Tool
 
-A modular quest-based SaaS platform enabling themed, interactive experiences. This MVP focuses on Questmas - shareable Christmas calendars with daily quests and challenges.
+A comprehensive web-based SaaS application for writers to manage worldbuilding, write stories, and publish their work.
 
-**Current Status**: MVP is functional and ready for testing. Core features for Christmas calendar creation and participation are implemented.
+## 🚀 Getting Started
 
-## Technology Stack
+This project is in the initial setup phase. Please refer to the template files in `/docs/templates/` to fill in project details and requirements.
 
-- **Frontend**: React 18, Vite 5, TypeScript 5
-- **Styling**: Tailwind CSS 3 (with custom Christmas theme)
-- **Backend**: Supabase (PostgreSQL, Auth, Storage, Edge Functions)
-- **State Management**: TanStack Query 5
-- **Forms**: React Hook Form 7, Zod 3
-- **i18n**: i18next 23 (English & German supported)
-- **Icons**: Lucide React
-- **Fonts**: Playfair Display (headings), Inter (body)
+## 📋 Template Files
 
-## Implemented Features
+All template instruction files are located in `/docs/templates/`:
 
-### ✅ Core Functionality
-- User authentication (email/password via Supabase Auth)
-- Quest creation and management (Christmas calendar type)
-- 24-day calendar structure with daily unlock schedule
-- Task/challenge creation with instructions and location hints
-- Quest publishing with shareable links
-- Personalized sharing with recipient name
-- Quest participation flow
-- Calendar view with door-opening interface
-- Task completion with photo upload
-- Photo watermarking with custom text
-- Test mode for previewing unpublished quests
+- **README_TEMPLATE.md** - Main project README template
+- **ARCHITECTURE_TEMPLATE.md** - System architecture documentation
+- **REQUIREMENTS_TEMPLATE.md** - Functional and non-functional requirements
+- **TECH_STACK_TEMPLATE.md** - Technology choices and rationale
+- **DATA_MODEL_TEMPLATE.md** - Database schema and data models
+- **API_DESIGN_TEMPLATE.md** - API endpoint specifications
+- **USER_STORIES_TEMPLATE.md** - User stories and acceptance criteria
+- **DEPLOYMENT_TEMPLATE.md** - Deployment and infrastructure setup
+- **DEVELOPMENT_SETUP_TEMPLATE.md** - Local development environment setup
+- **PROJECT_STRUCTURE_TEMPLATE.md** - Recommended project structure
+- **IMPLEMENTATION_PLAN_TEMPLATE.md** - Phased implementation plan
+- **BRANDING_GUIDE_TEMPLATE.md** - Brand identity and design guidelines
 
-### ✅ User Experience
-- Modern, festive landing page with hero image
-- Responsive design (mobile-first)
-- Internationalization (English & German)
-- Personalized greetings for quest recipients
-- Two-step photo upload flow (clue → "I found it" → photo)
-- Location hints (shown on request)
-- Photo text editing before sharing
-- Viral photo sharing with branded watermarks
-
-### ✅ Admin Features
-- Quest dashboard with quest listing
-- Quest builder with grid/list view
-- Task editor for daily challenges
-- Quest preview functionality
-- Quest deletion
-- Analytics dashboard (basic)
-
-### 🎨 Design & Theming
-- Modern Christmas theme (dark teal/green backgrounds, cream cards, gold accents)
-- Festive animations (snowfall, sparkles)
-- Custom color palette matching brand
-- Hero image support
-- Modal overlays with blur effects
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 20.x LTS
-- npm 10.x
-- Supabase CLI (for local development)
-
-### Installation
-
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Set up environment variables:
-   ```bash
-   cp .env.example .env.local
-   ```
-   Edit `.env.local` with your Supabase credentials.
-
-4. Start local Supabase (if using local development):
-   ```bash
-   supabase start
-   ```
-
-5. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-The app will be available at `http://localhost:5173`
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run format` - Format code with Prettier
-- `npm run type-check` - Run TypeScript type checking
-- `npm test` - Run tests
-- `npm run test:ui` - Run tests with UI
-- `npm run test:coverage` - Run tests with coverage
-
-## Project Structure
+## 📁 Project Structure
 
 ```
-src/
-  ├── components/     # React components
-  ├── pages/         # Route components
-  ├── hooks/         # Custom React hooks
-  ├── lib/           # Utilities, Supabase client, schemas
-  ├── styles/        # Global CSS, theme config
-  ├── locales/       # i18n files (en, de)
-  └── main.tsx       # Entry point
-supabase/
-  ├── migrations/    # SQL migrations
-  ├── functions/     # Edge Functions
-  └── config.toml
+/workspace/
+├── docs/
+│   └── templates/          # Template instruction files
+├── src/                    # Source code (to be structured)
+└── README.md               # This file
 ```
 
-## Development
+## 🎯 Core Features (Planned)
 
-Follow the coding standards in `Project Requirement Documentation#/codinginstructions.md` and architecture guidelines in `Project Requirement Documentation#/architecture.md`.
+### Worldbuilding
+- Character management
+- Timeline creation
+- Location mapping
+- Flexible object database for world elements
 
-## License
+### Writing
+- Chapter management
+- Rich text editor
+- Spell checking
+- Tagging system
 
-Proprietary - All rights reserved
+### Publishing
+- Ebook generation (EPUB, MOBI)
+- Word document export
+- Customizable formatting
 
+## 📝 Next Steps
+
+1. Review and fill out all template files in `/docs/templates/`
+2. Set up your development environment
+3. Choose your technology stack
+4. Begin implementation following the implementation plan
+
+## 📚 Documentation
+
+Once you've filled out the templates, move them from `/docs/templates/` to `/docs/` and update this README with actual project information.
+
+## 🤝 Contributing
+
+[To be filled in]
+
+## 📄 License
+
+[To be filled in]
